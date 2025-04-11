@@ -1,6 +1,6 @@
 {
 	"name": "m360ict-antd-dsh-cli",
-	"version": "1.0.1",
+	"version": "1.0.0",
 	"main": "index.js",
 	"sideEffects": false,
 	"description": "CLI for quickly generating modern React + Vite dashboards with built-in Redux Toolkit and Ant Design support — perfect for admin panels and data-driven apps.",
