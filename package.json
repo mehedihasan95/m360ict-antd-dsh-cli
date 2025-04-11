@@ -9,11 +9,17 @@
 	},
 	"type": "module",
 	"scripts": {
-		"build": "tsc",
+		"clean": "rm -rf dist",
+		"build": "npm run clean && tsc",
+		"yarn:build": "yarn clean && tsc",
 		"prepublishOnly": "npm run build",
 		"dev": "tsc --watch"
 	},
-	"keywords": [],
+	"keywords": [
+		"m360ict",
+		"m360ict-cli",
+		"m360ict-antd-dsh-cli"
+	],
 	"authors": [
 		"Mehedi Hasan",
 		"Nazmul Hasan"
