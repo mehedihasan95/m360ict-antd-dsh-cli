@@ -1,0 +1,48 @@
+{
+	"name": "m360ict-antd-dsh-cli",
+	"version": "1.0.0",
+	"main": "index.js",
+	"sideEffects": false,
+	"description": "CLI for quickly generating modern React + Vite dashboards with built-in Redux Toolkit and Ant Design support — perfect for admin panels and data-driven apps.",
+	"bin": {
+		"m360ict-antd-dsh-cli": "./dist/index.js"
+	},
+	"type": "module",
+	"scripts": {
+		"build": "tsc",
+		"prepublishOnly": "npm run build",
+		"dev": "tsc --watch"
+	},
+	"keywords": [],
+	"authors": [
+		"Mehedi Hasan",
+		"Nazmul Hasan"
+	],
+	"license": "MIT",
+	"devDependencies": {
+		"@eslint/js": "^9.24.0",
+		"@types/node": "^22.14.0",
+		"@types/chalk": "^0.4.31",
+		"@types/prompts": "^2.4.9",
+		"eslint": "^9.24.0",
+		"eslint-config-prettier": "^10.1.2",
+		"eslint-plugin-prettier": "^5.2.6",
+		"eslint-plugin-react": "^7.37.5",
+		"globals": "^16.0.0",
+		"prettier": "^3.5.3",
+		"typescript": "^5.8.3",
+		"typescript-eslint": "^8.29.1"
+	},
+	"files": [
+		"dist"
+	],
+	"dependencies": {
+		"chalk": "^5.4.1",
+		"execa": "^9.5.2",
+		"inquirer": "^12.5.2",
+		"prompts": "^2.4.2"
+	},
+	"engines": {
+		"node": ">=18"
+	}
+}
