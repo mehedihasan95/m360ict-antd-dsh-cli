@@ -4,6 +4,13 @@ import chalk from 'chalk';
 import { execa } from 'execa';
 import prompts from 'prompts';
 
+import fs from 'fs-extra';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 async function initializeProject() {
 	console.log(
 		chalk.cyan(
@@ -61,13 +68,35 @@ async function initializeProject() {
 	};
 
 	try {
+		// Create Vite app
 		await execa(dependencyManager, createCommands[dependencyManager], {
 			stdio: 'inherit',
 		});
 
+		////////////////////////////////////////// REDUX START //////////////////////////////////////////
+		const projectPath = path.join(process.cwd(), applicationName);
+		process.chdir(projectPath);
+
+		console.log(chalk.cyan('\n🔧 Installing Redux Toolkit...'));
+		const installCommands = {
+			npm: ['install', '@reduxjs/toolkit', 'react-redux'],
+			yarn: ['add', '@reduxjs/toolkit', 'react-redux'],
+			pnpm: ['add', '@reduxjs/toolkit', 'react-redux'],
+		};
+		await execa(dependencyManager, installCommands[dependencyManager], {
+			stdio: 'inherit',
+		});
+		// Copy Redux boilerplate files
+		console.log(chalk.cyan('\n📁 Copying Redux Toolkit structure...'));
+		const reduxTemplatePath = path.join(__dirname, 'templates', 'redux');
+		const targetReduxPath = path.join(projectPath, 'src', 'redux');
+		await fs.copy(reduxTemplatePath, targetReduxPath);
+
 		console.log(chalk.greenBright(`\n✅ Project setup complete!\n`));
 		console.log(chalk.yellow(`📂 Next steps:`));
 		console.log(chalk.blueBright(`  cd ${applicationName}`));
+
+		////////////////////////////////////////// REDUX END //////////////////////////////////////////
 
 		// Command mappings for different managers
 		const nextCommands = {
