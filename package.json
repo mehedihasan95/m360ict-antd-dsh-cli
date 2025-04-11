@@ -15,6 +15,13 @@
 		"prepublishOnly": "npm run build",
 		"dev": "tsc --watch"
 	},
+	"tsup": {
+		"entry": [
+			"src/index.ts"
+		],
+		"outDir": "dist",
+		"onSuccess": "cp -r src/templates dist/templates"
+	},
 	"keywords": [
 		"m360ict",
 		"m360ict-cli",
