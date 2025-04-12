@@ -1,55 +1,38 @@
+// src/utilities/reduxSetup.js
+import chalk from 'chalk';
 import { execa } from 'execa';
-import fs from 'fs/promises';
 import path from 'path';
+import { copyDir } from '../../utilities/fileUtils.js';
 
-export async function setupReduxToolkit(
-	applicationName: string,
-	dependencyManager: string,
+/**
+ * Installs and sets up Redux in the project
+ * @param {string} projectPath - Path to the project directory
+ * @param {string} dependencyManager - Package manager to use (npm, yarn, pnpm)
+ * @param {string} templatesPath - Path to templates directory
+ */
+export async function setupRedux(
+	projectPath: string,
+	dependencyManager: 'npm' | 'yarn' | 'pnpm',
+	templatesPath: string,
 ) {
-	const projectPath = path.join(process.cwd(), applicationName);
-	const packages = ['@reduxjs/toolkit', 'react-redux'];
-	const command =
-		dependencyManager === 'npm' ? ['install', ...packages]
-		: dependencyManager === 'pnpm' ? ['add', ...packages]
-		: ['add', ...packages];
+	console.log(chalk.cyan('\n🔧 Installing Redux Toolkit...'));
 
-	await execa(dependencyManager, command, {
-		cwd: projectPath,
+	const installCommands = {
+		npm: ['install', '@reduxjs/toolkit', 'react-redux'],
+		yarn: ['add', '@reduxjs/toolkit', 'react-redux'],
+		pnpm: ['add', '@reduxjs/toolkit', 'react-redux'],
+	};
+
+	await execa(dependencyManager, installCommands[dependencyManager], {
 		stdio: 'inherit',
 	});
 
-	await createReduxStructure(projectPath);
-}
+	// Copy Redux boilerplate files
+	console.log(chalk.cyan('\n📁 Copying Redux Toolkit structure...'));
+	const reduxTemplatePath = path.join(templatesPath, 'redux');
+	const targetReduxPath = path.join(projectPath, 'src', 'redux');
 
-async function createReduxStructure(projectPath: string) {
-	const reduxDir = path.join(projectPath, 'src', 'redux');
-	const apiDir = path.join(reduxDir, 'api');
-	const sliceDir = path.join(reduxDir, 'slice');
-	const utilitiesDir = path.join(reduxDir, 'utilities');
+	await copyDir(reduxTemplatePath, targetReduxPath);
 
-	// Create directories
-	await fs.mkdir(apiDir, { recursive: true });
-	await fs.mkdir(sliceDir, { recursive: true });
-	await fs.mkdir(utilitiesDir, { recursive: true });
-
-	// Write placeholder files if needed
-	await fs.writeFile(path.join(reduxDir, 'store.ts'), '// store setup here');
-	await fs.writeFile(
-		path.join(reduxDir, 'index.ts'),
-		'// combine & export store here',
-	);
-	await fs.writeFile(path.join(apiDir, 'api.ts'), '// api logic here');
-	await fs.writeFile(
-		path.join(sliceDir, 'authSlice.ts'),
-		'// slice setup here',
-	);
-	await fs.writeFile(
-		path.join(utilitiesDir, 'baseQuery.ts'),
-		'// baseQuery logic here',
-	);
-	await fs.writeFile(
-		path.join(utilitiesDir, 'response.ts'),
-		'// response helpers',
-	);
-	await fs.writeFile(path.join(utilitiesDir, 'tags.ts'), '// tags here');
+	console.log(chalk.green('\n✅ Redux setup complete!'));
 }
